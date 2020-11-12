@@ -1,113 +1,114 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
+  Image,
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import img from './lulea.png';
 
-const App: () => React$Node = () => {
+const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+      <SafeAreaView style={styles.container}>          
+          <View style={styles.imageContainer}>
+            <Image style={styles.image}
+              source={img}
+            />
           </View>
-        </ScrollView>
+          <View style={styles.buttonCols}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+                <Text style={styles.buttonText}>BUTTON 1</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+                <Text style={styles.buttonText}>BUTTON 2</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+                <Text style={styles.buttonText}>BUTTON 3</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+                <Text style={styles.buttonText}>BUTTON 4</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.epostContainer}>
+            <View style={styles.epost}>
+              <Text style={styles.epostText}>Epost:</Text>
+              <TextInput 
+                style={styles.textInput}
+                placeholder="hejsan@svejsan.net"
+              />
+            </View>
+          </View> 
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    height: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  buttonCols: {
+    flexDirection: 'row',
+    flex: 1
   },
-  body: {
-    backgroundColor: Colors.white,
+  buttonContainer: {
+    flexDirection: 'column',
+    width: '50%',
+    justifyContent: 'flex-start'
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  button: {
+    backgroundColor: '#187bcd',
+    padding: 20,
+    margin: 10,
+    alignItems: 'center'
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  buttonText: {
+    color: '#fff',
+    fontSize: 15
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  imageContainer: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  highlight: {
-    fontWeight: '700',
+  image: {
+    alignSelf: 'center',
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
+  epostContainer: {
+    marginTop: 50,
+    flex: 1
+  },
+  epost: {
+    width: '100%',
+    flexDirection: 'row',
+  },
+  epostText: {
+    flex: 1,
+    fontSize: 15,
+    marginRight: 20,  
     textAlign: 'right',
+    alignSelf: 'center'
+  },
+  textInput: {
+    flex: 2,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    marginRight: 20
   },
 });
 
