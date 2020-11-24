@@ -1,6 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 
-import {StyleSheet, ImageBackground, Text, View, Image} from 'react-native';
+import {StyleSheet, ImageBackground, Text, View, Image, Animated} from 'react-native';
+
+//
+//    {!current && <CardFront cardInfo={cardInfo} />}
+//   {current && <CardBack style={{transform: [{rotateY: '-180deg'}]}} cardInfo={cardInfo} />} */}
 
 const cardBackground = require('../assets/7.jpeg');
 const chip = require('../assets/chip.png');
@@ -10,114 +14,173 @@ const mastercard = require('../assets/mastercard.png');
 const visa = require('../assets/visa.png');
 
 const label = {
-  amex: amex,
-  discover: discover,
-  mastercard: mastercard,
-  visa: visa,
+  3: {img: amex,  width: 40, height: 30},
+  4: {img: visa,  width: 40, height: 30},
+  5: {img: mastercard,  width: 40, height: 30},
+  6: {img: discover,  width: 80, height: 20},
 };
 
 const Card = ({cardInfo}) => {
-  const CardFront = () => {
-    return (
-      <>
-        <ImageBackground source={cardBackground} style={styles.card}>
-          <View style={styles.container}>
-            <View style={styles.row}>
-              <Image source={chip} style={styles.chip}></Image>
-              <Image source={amex} style={styles.label}></Image>
-            </View>
 
-            <Text style={styles.cardNumber}>{cardInfo.cardNumber}</Text>
+  const [rot, setRot] = useState('0deg');
 
-            <View style={styles.row}>
-              <View style={styles.col}>
-                <Text style={{color: 'white'}}>Card Holder</Text>
-                <Text style={styles.cardName}>{cardInfo.cardName}</Text>
-              </View>
+  /* return (
+  <Animated.View                 // Special animatable View
+    style={{
+      transform: [{rotateY: rot}]          // Bind opacity to animated value
+    }}
+  >
+   <CardFront cardInfo={cardInfo} />
+   <CardBack cardInfo={cardInfo} />
+  </Animated.View>
+  ); */
+  return (
+    <CardFront cardInfo={cardInfo} />
+  ) 
+ 
 
-              <View style={styles.col}>
-                <Text style={{color: 'white'}}>Expires</Text>
-                <Text
-                  style={{
-                    color: 'white',
-                  }}>{`${cardInfo.expMonth}/${cardInfo.expYear}`}</Text>
-              </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </>
-    );
+  /* return cardInfo.isRotated ? <CardBack cardInfo={cardInfo} /> : <CardFront cardInfo={cardInfo} />; */
+};
+
+const CardFront = ({cardInfo}) => {
+  const hashtag = (arg) => {
+    arg = arg.replace(/\s+/g, '');
+    
+    const n = 16 - arg.length;
+    for (let i = 0; i < n; i++) {
+      arg += '#';
+    }    
+    let text = arg.match(/.{1,4}/g);
+    return text.join(' ');
   };
 
-  const CardBack = () => {
-    return (
-      <>
-        <ImageBackground source={cardBackground} style={styles.card}>
-          <View style={styles.container}>
-            <Text style={styles.line}></Text>
-
+  return (
+    <>
+      <ImageBackground source={cardBackground} style={styles.card} imageStyle={{ borderRadius: 16}}>
+        <View style={styles.container}>
+          <View style={styles.row}>
+              <Image source={chip} style={styles.chip}></Image> 
+              {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
           </View>
 
-        </ImageBackground>
-      </>
-    );
-  };
+          <View style={styles.row}>
+            <Text style={styles.cardNumber}>{hashtag(cardInfo.cardNumber)}</Text>
+          </View>
 
-  return cardInfo.isRotated ? <CardBack /> : <CardFront />;
+          <View style={{...styles.row, flex: 1}}>
+            <View style={{flex:1, flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'space-between'}}>
+            <View style={{...styles.col, flex: 1, marginRight: 10 }}>
+              <Text style={{color: 'white'}}>Card Holder</Text>
+              <Text numberOfLines={1} style={styles.cardName}>{cardInfo.cardName}</Text>
+            </View>
+
+            <View style={styles.col}>
+              <Text style={{color: 'white'}}>Expires</Text>
+              <Text
+                style={{
+                  color: 'white',
+                }}>{`${cardInfo.expMonth}/${cardInfo.expYear}`}</Text>
+            </View>
+            </View>
+          </View> 
+        </View>
+      </ImageBackground>
+    </>
+  );
+};
+
+const CardBack = ({cardInfo}) => {
+  return (
+    <View style={{transform: [{rotateY: '180deg'}]}}>
+      <ImageBackground source={cardBackground} style={styles.card}>
+        <View style={{...styles.container, padding: 0, alignItems: 'center'}}>
+          <View style={styles.line}></View>
+  
+            <Text style={{color: 'white', alignSelf: 'flex-end', marginTop: 30, marginRight: 15}}>CVV</Text>
+   
+          
+          <View style={styles.containerCvv}>
+            <Text style={styles.cvv}>{cardInfo.cvv}</Text>
+          </View>
+          <View style={{flex: 1, alignSelf: 'flex-end', marginRight: 20 }}> 
+            {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
+          </View>
+        </View>
+
+      </ImageBackground>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    width: '100%',
+    width: 300,
+    height: 193,
+    //borderWidth: 2,
+    borderRadius: 45,
+    //borderColor: 'red'
   },
   container: {
     flex: 1,
     flexDirection: 'column',
-    padding: 20,
-    borderWidth: 2,
-    borderColor: 'white',
+    padding: 10,
+    //borderWidth: 2,
+    //borderRadius: 10, 
+    //borderColor: 'white',
   },
   row: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   col: {
-    flex: 1,
     flexDirection: 'column',
-    //borderWidth: 2,
-    //borderColor: 'white',
-    //backgroundColor: 'blue',
+    borderWidth: 1,
+    borderColor: 'white',
+    padding: 5,
+    overflow: 'hidden',
   },
   chip: {
-    width: 70,
-    height: 50,
-    borderRadius: 10,
+    width: 40,
+    height: 30,
+    borderRadius: 4,
   },
   label: {
-    width: 90,
-    height: 40,
     resizeMode: 'contain',
   },
   cardNumber: {
     color: 'white',
-    fontSize: 25,
+    fontSize: 20,
     borderWidth: 1,
     borderRadius: 2,
     borderColor: 'white',
+    marginTop: 30,
+    padding: 5,
+    width: '100%'
   },
   cardName: {
-    flex: 1,
     color: 'white',
-    alignItems: 'flex-start',
   },
   line: {
-    flex: 1,
-    position: 'absolute',
     backgroundColor: 'black',
     width: '100%',
+    height: 35,
+    marginTop: 30,
   },
+  containerCvv: {
+    backgroundColor: 'white',
+    width: '90%',
+    height: 20,
+
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  cvv: {
+    flex: 1,
+    fontSize: 10,
+    textAlign: 'right',
+    marginRight: 5,
+    fontStyle: 'italic',
+  }
 
 });
 

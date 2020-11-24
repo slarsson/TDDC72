@@ -15,60 +15,44 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const CardForm = ({cardInfo, setCardInfo}) => {
-  const [input, setInput] = useState({
-    cardNumber: '',
-    cardName: '',
-    cardType: null,
-    expMonth: '10',
-    expYear: '',
-    cvv: '',
-  });
-
+  
   const handleCardNumber = (value) => {
     let text = `${value}`;
     if (!text.match(/^[0-9\s+]*$/g) || text.length > 19) return;
     text = text.replace(/\s+/g, '');
     text = text.match(/.{1,4}/g);
     if (text == null) {
-      input.cardNumber = '';
+      cardInfo.cardNumber = '';
     } else {
-      input.cardNumber = text.join(' ');
+      cardInfo.cardNumber = text.join(' ');
     }
 
-    if (input.cardNumber.length > 0) {
-      input.cardType = Number.parseInt(input.cardNumber[0]);
+    if (cardInfo.cardNumber.length > 0) {
+      cardInfo.cardType = Number.parseInt(cardInfo.cardNumber[0]);
     } else {
-      input.cardType = null;
-      input.cvv = '';
+      cardInfo.cardType = null;
+      cardInfo.cvv = '';
     }
-    setCardInfo({...input});
+    setCardInfo({...cardInfo});
   };
 
   const handleCvv = (value) => {
     let text = `${value}`;
     if (
       !text.match(/^[0-9]*$/g) ||
-      text.length > (input.cardType === 3 ? 4 : 3)
+      text.length > (cardInfo.cardType === 3 ? 4 : 3)
     )
       return;
-    input.cvv = text;
-    setCardInfo({...input});
+    cardInfo.cvv = text;
+    setCardInfo({...cardInfo});
   };
 
   const handleCardName = (value) => {
-    input.cardName = value;
-    setCardInfo({...input});
+    cardInfo.cardName = value;
+    setCardInfo({...cardInfo});
   };
 
   const handleSubmit = () => {
-    setInput({
-      cardNumber: '',
-      cardName: '',
-      cardType: null,
-      expMonth: '',
-      expYear: '',
-      cvv: '',
-    });
     setCardInfo({
       cardNumber: '',
       cardName: '',
@@ -80,13 +64,13 @@ const CardForm = ({cardInfo, setCardInfo}) => {
   };
 
   const onChangeMonth = (value) => {
-    input.expMonth = Number.parseInt(value);
-    setCardInfo({...input});
+    cardInfo.expMonth = Number.parseInt(value);
+    setCardInfo({...cardInfo});
   };
 
   const onChangeYear = (value) => {
-    input.expYear = Number.parseInt(value);
-    setCardInfo({...input});
+    cardInfo.expYear = Number.parseInt(value);
+    setCardInfo({...cardInfo});
   };
 
   let months = [];
@@ -95,9 +79,9 @@ const CardForm = ({cardInfo, setCardInfo}) => {
   }
 
   let years = [];
-  let currentYear = new Date(Date.now()).getFullYear();
+  let currentYear = new Date(Date.now()).getFullYear() % 2000;
   for (let i = currentYear; i <= currentYear + 10; i++) {
-    years.push(<Picker.Item label={`${i % 2000}`} value={i} />);
+    years.push(<Picker.Item label={`${i}`} value={i} />);
   }
 
   return (
@@ -115,14 +99,14 @@ const CardForm = ({cardInfo, setCardInfo}) => {
                   keyboardType="numeric"
                   style={styles.inputField}
                   onChangeText={handleCardNumber}
-                  value={input.cardNumber}
+                  value={cardInfo.cardNumber}
                 />
               </View>
               <View style={{marginBottom: 20}}>
                 <Text style={{marginBottom: 5}}>Card Name</Text>
                 <TextInput
                   style={styles.inputField}
-                  value={input.cardName}
+                  value={cardInfo.cardName}
                   onChangeText={handleCardName}
                 />
               </View>
@@ -139,7 +123,7 @@ const CardForm = ({cardInfo, setCardInfo}) => {
                         }}>
                         <Picker
                           onValueChange={onChangeMonth}
-                          selectedValue={input.expMonth}>
+                          selectedValue={cardInfo.expMonth}>
                           <Picker.Item value="" label="MM" />
                           {months}
                         </Picker>
@@ -154,7 +138,7 @@ const CardForm = ({cardInfo, setCardInfo}) => {
                         }}>
                         <Picker
                           onValueChange={onChangeYear}
-                          selectedValue={input.expYear}>
+                          selectedValue={cardInfo.expYear}>
                           <Picker.Item value="" label="YY" />
                           {years}
                         </Picker>
@@ -168,9 +152,11 @@ const CardForm = ({cardInfo, setCardInfo}) => {
                   <TextInput
                     keyboardType="numeric"
                     style={{...styles.inputField, fontSize: 16}}
-                    value={input.cvv}
+                    value={cardInfo.cvv}
                     onChangeText={handleCvv}
-                  />
+                    onFocus={() => {cardInfo.isRotated = true; setCardInfo({...cardInfo});}}
+                    onBlur={() => {cardInfo.isRotated = false; setCardInfo({...cardInfo});}}
+                  />  
                 </View>
               </View>
               <TouchableOpacity

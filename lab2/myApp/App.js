@@ -8,12 +8,13 @@ import {
 } from 'react-native';
 
 const initialCardInfo = {
-  cardNumber: '#### #### #### ####',
-  cardName: 'AD SOYAD',
+  cardNumber: '',
+  cardName: '',
   expMonth: 'MM',
   expYear: 'YY',
+  cardType: null,
   cvv: '',
-  isRotated: false,
+  isRotated: false
 }
 
 const App = () => {
@@ -37,10 +38,10 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    //backgroundColor: '#000'
   },
   cardContainer:{
     flex: 1,
-    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
