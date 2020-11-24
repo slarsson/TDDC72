@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
-import {StyleSheet, ImageBackground, Text, View, Image, Animated} from 'react-native';
-
-//
-//    {!current && <CardFront cardInfo={cardInfo} />}
-//   {current && <CardBack style={{transform: [{rotateY: '-180deg'}]}} cardInfo={cardInfo} />} */}
+import {
+  StyleSheet, 
+  ImageBackground, 
+  Text, 
+  View, 
+  Image, 
+  Animated
+} from 'react-native';
 
 const cardBackground = require('../assets/7.jpeg');
 const chip = require('../assets/chip.png');
@@ -20,29 +22,7 @@ const label = {
   6: {img: discover,  width: 80, height: 20},
 };
 
-const Card = ({cardInfo}) => {
-
-  const [rot, setRot] = useState('0deg');
-
-  /* return (
-  <Animated.View                 // Special animatable View
-    style={{
-      transform: [{rotateY: rot}]          // Bind opacity to animated value
-    }}
-  >
-   <CardFront cardInfo={cardInfo} />
-   <CardBack cardInfo={cardInfo} />
-  </Animated.View>
-  ); */
-  return (
-    <CardFront cardInfo={cardInfo} />
-  ) 
- 
-
-  /* return cardInfo.isRotated ? <CardBack cardInfo={cardInfo} /> : <CardFront cardInfo={cardInfo} />; */
-};
-
-const CardFront = ({cardInfo}) => {
+const Card = ({cardInfo, anime}) => {
   const hashtag = (arg) => {
     arg = arg.replace(/\s+/g, '');
     
@@ -54,60 +34,84 @@ const CardFront = ({cardInfo}) => {
     return text.join(' ');
   };
 
+  const addZero = (arg) => {
+    if (!Number.isInteger(arg) || arg > 9) return arg;
+    return `0${arg}`;
+  }
+
+  const rotFront = anime.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  });
+
+  const rotBack = anime.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['180deg', '0deg'],
+  });
+
+  useEffect(() => {
+    if (cardInfo.isRotated) {
+      Animated.timing(anime, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true
+      }).start()
+    } else {
+      Animated.timing(anime, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true
+      }).start()
+    }
+  }, [cardInfo.isRotated]);
+
   return (
-    <>
-      <ImageBackground source={cardBackground} style={styles.card} imageStyle={{ borderRadius: 16}}>
-        <View style={styles.container}>
-          <View style={styles.row}>
-              <Image source={chip} style={styles.chip}></Image> 
-              {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
-          </View>
-
-          <View style={styles.row}>
-            <Text style={styles.cardNumber}>{hashtag(cardInfo.cardNumber)}</Text>
-          </View>
-
-          <View style={{...styles.row, flex: 1}}>
-            <View style={{flex:1, flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'space-between'}}>
-            <View style={{...styles.col, flex: 1, marginRight: 10 }}>
-              <Text style={{color: 'white'}}>Card Holder</Text>
-              <Text numberOfLines={1} style={styles.cardName}>{cardInfo.cardName}</Text>
+    <View style={{width: 300, height: 193}}>
+      <Animated.View
+        style={{
+          transform: [{rotateY: rotFront}],
+          backfaceVisibility: 'hidden'
+        }}
+      >
+        <ImageBackground source={cardBackground} style={{...styles.card, padding: 10}} imageStyle={{borderRadius: 5}}>
+            <View style={styles.row}>
+                <Image source={chip} style={styles.chip}></Image> 
+                {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
             </View>
-
-            <View style={styles.col}>
-              <Text style={{color: 'white'}}>Expires</Text>
-              <Text
-                style={{
-                  color: 'white',
-                }}>{`${cardInfo.expMonth}/${cardInfo.expYear}`}</Text>
+            <View style={styles.row}>
+              <Text style={styles.cardNumber}>{hashtag(cardInfo.cardNumber)}</Text>
             </View>
+            <View style={{...styles.row, flex: 1, alignItems: 'flex-end'}}>
+              <View style={{...styles.col, flex: 1, marginRight: 10}}>
+                <Text style={{color: '#ccc'}}>Card Holder</Text>
+                <Text numberOfLines={1} style={styles.cardName}>{cardInfo.cardName}</Text>
+              </View>
+              <View style={styles.col}>
+                <Text style={{color: '#ccc'}}>Expires</Text>
+                <Text style={{color: 'white',}}>{`${addZero(cardInfo.expMonth)}/${cardInfo.expYear}`}</Text>
+              </View>
             </View>
-          </View> 
-        </View>
-      </ImageBackground>
-    </>
-  );
-};
-
-const CardBack = ({cardInfo}) => {
-  return (
-    <View style={{transform: [{rotateY: '180deg'}]}}>
-      <ImageBackground source={cardBackground} style={styles.card}>
-        <View style={{...styles.container, padding: 0, alignItems: 'center'}}>
+        </ImageBackground>
+      </Animated.View>    
+      <Animated.View            
+        style={{
+          transform: [{rotateY: rotBack}],
+          backfaceVisibility: 'hidden'
+        }}
+      >
+        <ImageBackground source={cardBackground} style={styles.card} imageStyle={{borderRadius: 5}}>
           <View style={styles.line}></View>
-  
-            <Text style={{color: 'white', alignSelf: 'flex-end', marginTop: 30, marginRight: 15}}>CVV</Text>
-   
-          
-          <View style={styles.containerCvv}>
-            <Text style={styles.cvv}>{cardInfo.cvv}</Text>
+          <View style={styles.bottomBack}>
+            <Text style={{color: '#fff', paddingBottom: 2}}>CVV</Text>
+            <View style={styles.containerCvv}>
+              <Text style={styles.cvv}>{cardInfo.cvv}</Text>
+            </View>
+            <View style={styles.imageBack}>
+              {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
+            </View>
           </View>
-          <View style={{flex: 1, alignSelf: 'flex-end', marginRight: 20 }}> 
-            {label[cardInfo.cardType] && <Image source={label[cardInfo.cardType].img} style={{...styles.label, width: label[cardInfo.cardType].width, height: label[cardInfo.cardType].height}}></Image>}
-          </View>
-        </View>
-
-      </ImageBackground>
+        </ImageBackground>
+      </Animated.View>  
     </View>
   );
 };
@@ -116,17 +120,9 @@ const styles = StyleSheet.create({
   card: {
     width: 300,
     height: 193,
-    //borderWidth: 2,
     borderRadius: 45,
-    //borderColor: 'red'
-  },
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    padding: 10,
-    //borderWidth: 2,
-    //borderRadius: 10, 
-    //borderColor: 'white',
+    position: 'absolute',
+    
   },
   row: {
     flexDirection: 'row',
@@ -137,7 +133,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white',
     padding: 5,
-    overflow: 'hidden',
+    minWidth: '25%',
+    borderRadius: 4
   },
   chip: {
     width: 40,
@@ -168,20 +165,28 @@ const styles = StyleSheet.create({
   },
   containerCvv: {
     backgroundColor: 'white',
-    width: '90%',
-    height: 20,
-
+    height: 30,
     flexDirection: 'row',
     alignItems: 'center'
   },
   cvv: {
     flex: 1,
-    fontSize: 10,
+    fontSize: 15,
     textAlign: 'right',
     marginRight: 5,
     fontStyle: 'italic',
+  },
+  bottomBack: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    width: '90%',
+    padding: 10
+  },
+  imageBack: {
+    minHeight: 40,
+    justifyContent: 'center'
   }
-
 });
 
 export default Card;
