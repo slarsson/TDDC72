@@ -1,18 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
   TextInput,
-  Button,
   TouchableOpacity,
   Picker,
 } from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 const CardForm = ({cardInfo, setCardInfo}) => {
   
@@ -64,18 +58,22 @@ const CardForm = ({cardInfo, setCardInfo}) => {
   };
 
   const onChangeMonth = (value) => {
-    cardInfo.expMonth = Number.parseInt(value);
+    let n = Number.parseInt(value);
+    if (Number.isNaN(n)) return;
+    cardInfo.expMonth = n;
     setCardInfo({...cardInfo});
   };
 
   const onChangeYear = (value) => {
-    cardInfo.expYear = Number.parseInt(value);
+    let n = Number.parseInt(value);
+    if (Number.isNaN(n)) return;
+    cardInfo.expYear = n;
     setCardInfo({...cardInfo});
   };
 
   let months = [];
   for (let i = 1; i <= 12; i++) {
-    months.push(<Picker.Item label={i > 9 ? `${i}` : `0${i}`} value={i} />);
+    months.push(<Picker.Item label={i > 9 ? `${i}` : `0${i}`} value={i} key={'m' + i}/>);
   }
 
   let years = [];
@@ -86,89 +84,81 @@ const CardForm = ({cardInfo, setCardInfo}) => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          contentContainerStyle={{flex: 1}}>
-          <View style={styles.container}>
-            <View style={styles.box}>
-              <View style={{marginBottom: 20}}>
-                <Text style={{marginBottom: 5}}>Card Number</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  style={styles.inputField}
-                  onChangeText={handleCardNumber}
-                  value={cardInfo.cardNumber}
-                />
-              </View>
-              <View style={{marginBottom: 20}}>
-                <Text style={{marginBottom: 5}}>Card Name</Text>
-                <TextInput
-                  style={styles.inputField}
-                  value={cardInfo.cardName}
-                  onChangeText={handleCardName}
-                />
-              </View>
-              <View style={styles.dateCvv}>
-                <View style={styles.expContainer}>
-                  <Text style={{marginBottom: 5}}>Expiration Date</Text>
-                  <View style={styles.expInputs}>
-                    <View style={styles.wtf}>
-                      <View
-                        style={{
-                          ...styles.expInput,
-                          marginRight: 10,
-                          borderRadius: 6,
-                        }}>
-                        <Picker
-                          onValueChange={onChangeMonth}
-                          selectedValue={cardInfo.expMonth}>
-                          <Picker.Item value="" label="MM" />
-                          {months}
-                        </Picker>
-                      </View>
-                    </View>
-                    <View style={styles.wtf}>
-                      <View
-                        style={{
-                          ...styles.expInput,
-                          marginLeft: 10,
-                          borderRadius: 6,
-                        }}>
-                        <Picker
-                          onValueChange={onChangeYear}
-                          selectedValue={cardInfo.expYear}>
-                          <Picker.Item value="" label="YY" />
-                          {years}
-                        </Picker>
-                      </View>
-                    </View>
+      <View style={styles.container}>
+        <View style={styles.box}>
+          <View style={{marginBottom: 20}}>
+            <Text style={{marginBottom: 5}}>Card Number</Text>
+            <TextInput
+              keyboardType="numeric"
+              style={styles.inputField}
+              onChangeText={handleCardNumber}
+              value={cardInfo.cardNumber}
+            />
+          </View>
+          <View style={{marginBottom: 20}}>
+            <Text style={{marginBottom: 5}}>Card Name</Text>
+            <TextInput
+              style={styles.inputField}
+              value={cardInfo.cardName}
+              onChangeText={handleCardName}
+            />
+          </View>
+          <View style={styles.dateCvv}>
+            <View style={styles.expContainer}>
+              <Text style={{marginBottom: 5}}>Expiration Date</Text>
+              <View style={styles.expInputs}>
+                <View style={styles.wtf}>
+                  <View
+                    style={{
+                      ...styles.expInput,
+                      marginRight: 10,
+                      borderRadius: 6,
+                    }}>
+                    <Picker
+                      onValueChange={onChangeMonth}
+                      selectedValue={cardInfo.expMonth}>
+                      <Picker.Item value="" label="MM" />
+                      {months}
+                    </Picker>
                   </View>
                 </View>
-
-                <View style={styles.cvvContainer}>
-                  <Text style={{marginBottom: 5}}>CVV</Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    style={{...styles.inputField, fontSize: 16}}
-                    value={cardInfo.cvv}
-                    onChangeText={handleCvv}
-                    onFocus={() => {cardInfo.isRotated = true; setCardInfo({...cardInfo});}}
-                    onBlur={() => {cardInfo.isRotated = false; setCardInfo({...cardInfo});}}
-                  />  
+                <View style={styles.wtf}>
+                  <View
+                    style={{
+                      ...styles.expInput,
+                      marginLeft: 10,
+                      borderRadius: 6,
+                    }}>
+                    <Picker
+                      onValueChange={onChangeYear}
+                      selectedValue={cardInfo.expYear}>
+                      <Picker.Item value="" label="YY" />
+                      {years}
+                    </Picker>
+                  </View>
                 </View>
               </View>
-              <TouchableOpacity
-                style={styles.button}
-                activeOpacity={0.7}
-                onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
+            </View>
+            <View style={styles.cvvContainer}>
+              <Text style={{marginBottom: 5}}>CVV</Text>
+              <TextInput
+                keyboardType="numeric"
+                style={{...styles.inputField, fontSize: 16}}
+                value={cardInfo.cvv}
+                onChangeText={handleCvv}
+                onFocus={() => {cardInfo.isRotated = true; setCardInfo({...cardInfo});}}
+                onBlur={() => {cardInfo.isRotated = false; setCardInfo({...cardInfo});}}
+              />  
             </View>
           </View>
-        </ScrollView>
-      </SafeAreaView>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.7}
+            onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </>
   );
 };
@@ -192,13 +182,6 @@ const styles = StyleSheet.create({
   },
   wtf: {
     width: '50%',
-  },
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: Colors.lighter,
-    padding: 30,
   },
   dateCvv: {
     flexDirection: 'row',
