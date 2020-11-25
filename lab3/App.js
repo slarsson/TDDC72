@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,6 +14,10 @@ import {
   View,
   Text,
   StatusBar,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+  BackHandler
 } from 'react-native';
 
 import {
@@ -24,91 +28,130 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+
+import Card from './components/Card';
+import DetailView from './components/DetailView';
+import Select from './components/Select';
+
+
+const DATA = [
+  {
+    id: 'id1',
+    title: 'react-native',
+    repo: 'facebook/react-native',
+    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
+    stars: 12343,
+    forks: 2000
+  },
+  {
+    id: 'id2',
+    title: 'react-native',
+    repo: 'facebook/react-native',
+    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
+    stars: 12343,
+    forks: 100345
+  },
+  {
+    id: 'id3',
+    title: 'react-native',
+    repo: 'facebook/react-native',
+    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
+    stars: 12343,
+    forks: 234
+  },
+  {
+    id: 'id4',
+    title: 'react-native',
+    repo: 'facebook/react-native',
+    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
+    stars: 12343,
+    forks: 234
+  },
+  {
+    id: 'id5',
+    title: 'react-native',
+    repo: 'facebook/react-native',
+    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
+    stars: 12343,
+    forks: 234
+  }
+]
+
+const App = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [current, setCurrent] = useState(null);
+  
+  const renderItem = (value) => {
+    if (value.item.stars > 1000) {
+      value.item.stars = `${Math.round((value.item.stars / 1000) * 10) / 10}k`;
+    }
+    if (value.item.forks > 1000) {
+      value.item.forks = `${Math.round((value.item.forks / 1000) * 10) / 10}k`;
+    }
+    return <Card data={value.item} handler={setCurrent} />;
+  };
+
+  useEffect(() => {
+    console.log('wtf:', current);
+  }, [current]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+      setData(DATA);
+    }, 1000);
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      // "The event subscriptions are called in reverse order (i.e. the last registered subscription is called first)."
+      setCurrent(null);
+      return true;
+    });
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
+      <SafeAreaView style={{backgroundColor: '#f3f3f3', flex: 1}}>
+        
+      {current && <DetailView data={current} close={() => setCurrent(null)}/>}
+
+      {loading && 
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      } 
+        <View style={styles.main}>
+          <FlatList
+            style={{zIndex: 2}}
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+            // refreshControl={
+            //   <RefreshControl
+            //    refreshing={true}
+            //    onRefresh={() => {}}
+            //   />
+            //}
+          />
+        </View>
+
+        <Select />
+
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  main: {
+    marginTop: 80
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center'
+  }
 });
 
 export default App;
