@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
-const Select = () => {
+const Select = ({options, selected, setSelected}) => {
   const [display, setDisplay] = useState(false);
 
   return (
@@ -17,96 +17,22 @@ const Select = () => {
       <View style={{...styles.main, height: display ? '100%' : 'auto'}}>
         <View style={styles.selectContainer}>
           <TouchableOpacity style={styles.select} onPress={() => setDisplay(!display)}>
-            <Text style={styles.selectText}>Rust</Text>
+            <Text style={styles.selectText}>
+              {typeof options[selected] !== 'undefined' && options[selected].value}
+            </Text>
             <Icon name="caret-down" size={30} color="#fff" />
           </TouchableOpacity>
         </View>
         <View style={{maxHeight: '60%', display: display ? 'flex' : 'none'}}>
           <ScrollView style={styles.dropdown}>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.rowItem}>
-              <Text style={styles.rowItemText}>Golang</Text>
-            </TouchableOpacity>
+            {options.map((item, i) => (  
+              <TouchableOpacity style={styles.rowItem} key={item.key} onPress={() => {
+                setSelected(i);
+                setDisplay(false);
+              }}>
+                <Text style={{...styles.rowItemText, fontWeight: i == selected ? 'bold' : 'normal'}}>{item.value}</Text>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
       </View>
@@ -153,6 +79,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#ae55bc'
   }
 });
-
 
 export default Select;

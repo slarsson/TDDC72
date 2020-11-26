@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -20,20 +12,12 @@ import {
   BackHandler
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-
 import Card from './components/Card';
 import DetailView from './components/DetailView';
 import Select from './components/Select';
+import { API_TOKEN } from './_token';
 
-
+// test data
 const DATA = [
   {
     id: 'id1',
@@ -75,12 +59,72 @@ const DATA = [
     stars: 12343,
     forks: 234
   }
-]
+];
+
+const OPTIONS = [
+  {
+    key: 'PHP',
+    value: 'PHP'
+  },
+  {
+    key: 'go',
+    value: 'Go'
+  },
+  {
+    key: 'cpp',
+    value: 'C++'
+  },
+  {
+    key: 'java',
+    value: 'JAVA'
+  },
+  {
+    key: 'rust',
+    value: 'Rust'
+  }
+];
+
+const fetchData = (language) => {
+  return new Promise((resolve, reject) => {
+    // setTimeout(() => {
+    //   resolve(null);
+    // }, 1000);
+
+    fetch('https://api.github.com/graphql', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${API_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              search(query: "language:javascript sort:stars", type: REPOSITORY, first: 10) { 
+              repositoryCount,
+              nodes {
+                ... on Repository {
+                  name,
+                  stargazers {
+                    totalCount
+                  }
+                }
+              }
+            },
+          }`
+        })
+      })
+      .then(v => v.json())
+      .then(v => resolve(v))
+      .catch(err => reject(err));
+  });
+};
 
 const App = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(null);
+  const [option, setOption] = useState(0);
+  const lastRequest = useRef(0);
   
   const renderItem = (value) => {
     if (value.item.stars > 1000) {
@@ -93,15 +137,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log('wtf:', current);
-  }, [current]);
+    lastRequest.current = option;
+    const currentRequest = option; 
+    setLoading(true);
+    setData([]);
+    fetchData().then(data => {
+      if (currentRequest != lastRequest.current) return; // abort if "old" request finish before new
+      setLoading(false);
+      setData(DATA);  // TODO
+      console.log(data);
+    });
+  }, [option]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      setData(DATA);
-    }, 1000);
-
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       // "The event subscriptions are called in reverse order (i.e. the last registered subscription is called first)."
       setCurrent(null);
@@ -137,7 +185,7 @@ const App = () => {
           />
         </View>
 
-        <Select />
+        <Select options={OPTIONS} selected={option} setSelected={setOption} />
 
       </SafeAreaView>
     </>
