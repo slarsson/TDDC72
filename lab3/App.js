@@ -9,7 +9,8 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
-  BackHandler
+  BackHandler,
+  Alert
 } from 'react-native';
 
 import Card from './components/Card';
@@ -17,79 +18,62 @@ import DetailView from './components/DetailView';
 import Select from './components/Select';
 import { API_TOKEN } from './_token';
 
-// test data
-const DATA = [
-  {
-    id: 'id1',
-    title: 'react-native',
-    repo: 'facebook/react-native',
-    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
-    stars: 12343,
-    forks: 2000
-  },
-  {
-    id: 'id2',
-    title: 'react-native',
-    repo: 'facebook/react-native',
-    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
-    stars: 12343,
-    forks: 100345
-  },
-  {
-    id: 'id3',
-    title: 'react-native',
-    repo: 'facebook/react-native',
-    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
-    stars: 12343,
-    forks: 234
-  },
-  {
-    id: 'id4',
-    title: 'react-native',
-    repo: 'facebook/react-native',
-    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
-    stars: 12343,
-    forks: 234
-  },
-  {
-    id: 'id5',
-    title: 'react-native',
-    repo: 'facebook/react-native',
-    text: 'zapSuper fast and lightweight anchor-free object detection model. fireOnly 1.8mb and run 97FPS on cellphonefire ',
-    stars: 12343,
-    forks: 234
-  }
-];
-
 const OPTIONS = [
   {
-    key: 'PHP',
-    value: 'PHP'
+    key: null,
+    value: 'All'
   },
   {
-    key: 'go',
-    value: 'Go'
+    key: 'c#',
+    value: 'C#'
   },
   {
     key: 'cpp',
     value: 'C++'
   },
   {
+    key: 'go',
+    value: 'Go'
+  },
+  {
     key: 'java',
     value: 'JAVA'
   },
   {
+    key: 'javascript',
+    value: 'JavaScript'
+  },
+  {
+    key: 'jquery',
+    value: 'jquery',
+  },
+  {
+    key: 'php',
+    value: 'PHP'
+  },
+  {
+    key: 'python',
+    value: 'Python'
+  },
+  {
     key: 'rust',
     value: 'Rust'
-  }
+  },
+  {
+    key: 'starlark',
+    value: 'Starlark'
+  },
+  {
+    key: 'typescript',
+    value: 'TypeScript'
+  },
 ];
+
 
 const fetchData = (language) => {
   return new Promise((resolve, reject) => {
-    // setTimeout(() => {
-    //   resolve(null);
-    // }, 1000);
 
+    console.log(OPTIONS.slice(1).reduce((acc, value) => {return acc + `+language:${value.key}`}, '').slice(1));
     fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
@@ -98,23 +82,27 @@ const fetchData = (language) => {
         },
         body: JSON.stringify({
           query: `
-            query {
-              search(query: "language:javascript sort:stars", type: REPOSITORY, first: 10) { 
-              repositoryCount,
-              nodes {
-                ... on Repository {
-                  name,
-                  stargazers {
-                    totalCount
+            query($query: String!) {
+              search(query: $query, type: REPOSITORY, first: 20) { 
+                nodes {
+                  ... on Repository {
+                    id,
+                    name,
+                    owner {
+                      login
+                    },
+                    description,
+                    stargazerCount,
+                    forkCount,
                   }
                 }
-              }
-            },
-          }`
+              },
+            }`,
+          variables: {query: language ? `language:${language} sort:stars` : `sort:stars-desc ${OPTIONS.slice(1).reduce((acc, value) => {return acc + ` language:${value.key}`}, '')}`} 
         })
       })
       .then(v => v.json())
-      .then(v => resolve(v))
+      .then(v => resolve(v.data.search.nodes))
       .catch(err => reject(err));
   });
 };
@@ -125,28 +113,21 @@ const App = () => {
   const [current, setCurrent] = useState(null);
   const [option, setOption] = useState(0);
   const lastRequest = useRef(0);
-  
-  const renderItem = (value) => {
-    if (value.item.stars > 1000) {
-      value.item.stars = `${Math.round((value.item.stars / 1000) * 10) / 10}k`;
-    }
-    if (value.item.forks > 1000) {
-      value.item.forks = `${Math.round((value.item.forks / 1000) * 10) / 10}k`;
-    }
-    return <Card data={value.item} handler={setCurrent} />;
-  };
 
   useEffect(() => {
     lastRequest.current = option;
     const currentRequest = option; 
     setLoading(true);
     setData([]);
-    fetchData().then(data => {
+    fetchData(OPTIONS[option].key).then(value => {
       if (currentRequest != lastRequest.current) return; // abort if "old" request finish before new
       setLoading(false);
-      setData(DATA);  // TODO
-      console.log(data);
-    });
+      setData(value);
+    }).catch(err => {
+      setLoading(false);
+      console.log(err);
+      Alert.alert('Error', 'something went wrong', [{ text: 'OK', onPress: () => {}}])
+    })
   }, [option]);
 
   useEffect(() => {
@@ -162,31 +143,20 @@ const App = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{backgroundColor: '#f3f3f3', flex: 1}}>
-        
-      {current && <DetailView data={current} close={() => setCurrent(null)}/>}
-
-      {loading && 
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" />
-        </View>
-      } 
+        {current && <DetailView data={current} close={() => setCurrent(null)}/>}
+        {loading && 
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="black" />
+          </View>
+        } 
         <View style={styles.main}>
           <FlatList
-            style={{zIndex: 2}}
             data={data}
-            renderItem={renderItem}
+            renderItem={(value) => <Card data={value.item} handler={setCurrent} />}
             keyExtractor={item => item.id}
-            // refreshControl={
-            //   <RefreshControl
-            //    refreshing={true}
-            //    onRefresh={() => {}}
-            //   />
-            //}
           />
         </View>
-
         <Select options={OPTIONS} selected={option} setSelected={setOption} />
-
       </SafeAreaView>
     </>
   );

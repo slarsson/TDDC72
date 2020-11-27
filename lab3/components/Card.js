@@ -7,20 +7,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+const format = (value) => {
+  return `${Math.round((value / 1000) * 10) / 10}k`;
+}
+
 const Card = ({data, handler}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => handler({...data})}>
-      <Text style={styles.title}>{data.title}</Text>
-      <Text style={styles.repo}>{data.repo}</Text>
-      <Text style={styles.text}>{data.text}</Text>
+      <Text style={styles.title}>{data.name}</Text>
+      <Text style={styles.repo}>{`${data.owner.login}/${data.name}`}</Text>
+      <Text style={styles.text}>{data.description}</Text>
       <View style={styles.statsContainer}>
         <View style={styles.stats}>
           <Icon name="star" size={30} />
-          <Text style={styles.statsText}>{data.stars}</Text>
+          <Text style={styles.statsText}>{format(data.stargazerCount)}</Text>
         </View>
         <View style={{...styles.stats, marginLeft: 20}}>
           <Icon name="code-fork" size={30} />
-          <Text style={styles.statsText}>{data.forks}</Text>
+          <Text style={styles.statsText}>{format(data.forkCount)}</Text>
         </View>
       </View>
     </TouchableOpacity>

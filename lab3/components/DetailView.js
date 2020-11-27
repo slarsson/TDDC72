@@ -10,17 +10,17 @@ import {
 const DetailView = ({data, close}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{data.title}</Text>
-      <Text style={styles.repo}>{data.repo}</Text>
-      <Text style={styles.text}>{data.text}</Text>
+      <Text style={styles.title}>{data.name}</Text>
+      <Text style={styles.repo}>{`${data.owner.login}/${data.name}`}</Text>
+      <Text style={styles.text}>{data.description}</Text>
       <View style={styles.statsContainer}>
         <View style={styles.stats}>
           <Icon name="star" size={30} />
-          <Text style={styles.statsText}>{data.stars}</Text>
+          <Text style={styles.statsText}>{data.stargazerCount}</Text>
         </View>
         <View style={{...styles.stats, marginLeft: 20}}>
           <Icon name="code-fork" size={30} />
-          <Text style={styles.statsText}>{data.forks}</Text>
+          <Text style={styles.statsText}>{data.forkCount}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.back} onPress={close}>
@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 20,
-    paddingTop: 20,
+    padding: 25,
+    paddingBottom: 0,
     color: '#586069',
     fontFamily: 'Ubuntu-Regular',
     textAlign: 'center'
