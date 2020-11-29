@@ -2,12 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
-  Text,
   StatusBar,
   FlatList,
-  RefreshControl,
   ActivityIndicator,
   BackHandler,
   Alert
@@ -24,8 +21,8 @@ const OPTIONS = [
     value: 'All'
   },
   {
-    key: 'c#',
-    value: 'C#'
+    key: 'c',
+    value: 'C'
   },
   {
     key: 'cpp',
@@ -44,8 +41,8 @@ const OPTIONS = [
     value: 'JavaScript'
   },
   {
-    key: 'jquery',
-    value: 'jquery',
+    key: 'matlab',
+    value: 'MATLAB'
   },
   {
     key: 'php',
@@ -69,11 +66,8 @@ const OPTIONS = [
   },
 ];
 
-
 const fetchData = (language) => {
   return new Promise((resolve, reject) => {
-
-    console.log(OPTIONS.slice(1).reduce((acc, value) => {return acc + `+language:${value.key}`}, '').slice(1));
     fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
@@ -98,7 +92,8 @@ const fetchData = (language) => {
                 }
               },
             }`,
-          variables: {query: language ? `language:${language} sort:stars` : `sort:stars-desc ${OPTIONS.slice(1).reduce((acc, value) => {return acc + ` language:${value.key}`}, '')}`} 
+          variables: {
+            query: language ? `language:${language} stars:>0 sort:stars` : `${OPTIONS.slice(1).reduce((acc, value) => {return acc + ` language:${value.key}`}, '')} sort:stars stars:>10000`} 
         })
       })
       .then(v => v.json())
@@ -125,7 +120,6 @@ const App = () => {
       setData(value);
     }).catch(err => {
       setLoading(false);
-      console.log(err);
       Alert.alert('Error', 'something went wrong', [{ text: 'OK', onPress: () => {}}])
     })
   }, [option]);

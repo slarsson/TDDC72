@@ -18,7 +18,7 @@ const DetailView = ({data, close}) => {
           <Icon name="star" size={30} />
           <Text style={styles.statsText}>{data.stargazerCount}</Text>
         </View>
-        <View style={{...styles.stats, marginLeft: 20}}>
+        <View style={styles.stats}>
           <Icon name="code-fork" size={30} />
           <Text style={styles.statsText}>{data.forkCount}</Text>
         </View>
@@ -83,7 +83,8 @@ const styles = StyleSheet.create({
   stats: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 30
+    paddingTop: 30,
+    justifyContent: 'center'
   },
   statsText: {
     fontFamily: 'Ubuntu-Regular',
