@@ -15,6 +15,8 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
  
+const today = new Date(Date.now());
+
 const App = () => {
   return (
     <>
@@ -22,7 +24,11 @@ const App = () => {
       <SafeAreaView style={{flex: 1}}>
     
         <ScrollView>
-          <Calendar />
+          <Calendar
+            currentDay={today.getDay()}
+            currentMonth={today.getMonth()}
+            currentYear={today.getFullYear()}          
+          />
           
           <Carousel 
             style={{paddingBottom: 30, margin: 30, backgroundColor: '#000'}}
