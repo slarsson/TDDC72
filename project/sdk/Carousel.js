@@ -1,4 +1,5 @@
 import React, { Component, useContext, createContext } from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   View,
   Text,
@@ -7,15 +8,10 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CarouselContext = createContext(null);
 
 class Carousel extends Component {
-  constructor(props) {
-    super(props);
-  }
-  
   render() {
     return (
       <View style={this.props.style}>
@@ -37,7 +33,7 @@ class Carousel extends Component {
 
 const Item = (props) => {
   const ctx = useContext(CarouselContext);
-
+  
   return (
     <TouchableOpacity style={{...styles.item, width: ctx.width}} activeOpacity={0.6} onPress={() => {
       if (typeof ctx.callback !== 'function') return;
@@ -47,7 +43,7 @@ const Item = (props) => {
         style={styles.image}
         source={{uri: props.url}}
       />
-      <View style={{...ctx.containerStyle}}>
+      <View style={ctx.containerStyle}>
         {props.rating && <View style={styles.rating}>
           <Icon name="star" size={25} color={'gold'} />
           <Text style={{...styles.ratingText, color: ctx.textStyle.color ? ctx.textStyle.color : '#fff'}}>{props.rating}</Text>
@@ -94,4 +90,3 @@ const styles = StyleSheet.create({
 });
 
 export default Carousel
-

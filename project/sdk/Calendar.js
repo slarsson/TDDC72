@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
@@ -6,105 +6,28 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-
-const gridStyles = StyleSheet.create({
-  current: {
-    backgroundColor: 'red'
-  },
-  currentText: {
-    color: 'green'
-  },
-  today: {
-    backgroundColor: 'orange'
-  },
-  todayText: {
-    color: 'red'
-  },
-  other: {
-    backgroundColor: 'blue'
-  },
-  otherText: {
-    color: 'pink'
-  }
-});
-
-const test = (year, month, today, cb) => {
-  let lastMonth = new Date(year, month, 0).getDate();
-  let currentMonth = new Date(year, (month + 1), 0).getDate();
-  let offset = new Date(year, month, 1).getDay();
-  
-  let rows = [];
-  let day, type;
-
-  if (offset > 0) {
-    day = lastMonth - (offset - 1);
-    type = true;
-  } else {
-    day = 1;
-    type = false;
-  }
-  
-  let styleBox, styleText;
-  let count = 0; 
-
-  for (let j = 0; j <= 5; j++) {
-    let row = [];
-    for (let i = 1; i <= 7; i++) {
-      if (type) {
-        styleBox = gridStyles.other;
-        styleText = gridStyles.otherText;
-      } else if (day == today) {
-        styleBox = gridStyles.today;
-        styleText = gridStyles.todayText;
-      } else {
-        styleBox = gridStyles.current;
-        styleText = gridStyles.currenText;
-      }
-      
-      let x = {
-        day: day,
-        month: type ? (day > 15 ? -1 : 1) : 0,
-      };
-
-      row.push(
-        <TouchableOpacity
-          key={Math.random() + Math.random()}
-          style={[styles.day, styleBox]}
-          onPress={() => cb(x)}
-        >
-          <Text style={styleText}>{day}</Text>
-        </TouchableOpacity>
-      );
-      
-      day++;
-      count++;
-      if (type) {
-        if (day > lastMonth) {
-          type = false;
-          day = 1;
-        }
-      } else {
-        if (day > currentMonth) {
-          day = 1;
-          type = true;     
-        }
-      }
-    }
-    rows.push(<View key={j} style={{flexDirection: 'row'}}>{row}</View>)
-  }
-  return rows;
-}
+import { calendarTable } from './calendarTable'; 
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-const Calender = ({currentYear, currentMonth, currentDay}) => {
+const Calender = ({onSelect, currentYear, currentMonth, currentDay, containerStyle, selectedColor, todayColor}) => {
   const [year, setYear] = useState(currentYear);
-  const [month, setMonth] = useState(currentMonth);
-  
+  const [month, setMonth] = useState(currentMonth - 1);
+  const [selected, setSelected] = useState(-1);
+
+  useEffect(() => {
+    if (typeof onSelect !== 'function' || selected === -1) return;
+    onSelect({
+      year: year,
+      month: month + 1,
+      day: selected
+    });
+  }, [year, month, selected])
+
   const today = useRef({
     day: currentDay,
-    month: currentMonth,
+    month: currentMonth - 1,
     year: currentYear
   });
 
@@ -127,74 +50,77 @@ const Calender = ({currentYear, currentMonth, currentDay}) => {
   };
 
   return (
-    <View style={{margin: 20}}>
-      <View style={styles.dateHeaderPicker}>
-        <TouchableOpacity
-          onPress={() => prev()}
-        >
-          <Icon name="chevron-left" size={40} color={'gold'} />   
+    <View style={[styles.container, containerStyle]}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => prev()} style={styles.chevron}>
+          <Icon name="chevron-left" size={20} color={'black'} />   
         </TouchableOpacity>     
-          <Text style={styles.dateHeader}>{MONTHS[month]} {year}</Text>
-        <TouchableOpacity
-          onPress={() => next()}
+          <Text style={styles.headerText}>{MONTHS[month]} {year}</Text>
+        <TouchableOpacity onPress={() => next()} style={styles.chevron}
         >
-          <Icon name="chevron-right" size={40} color={'gold'} />
+          <Icon name="chevron-right" size={20} color={'black'} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.dayHeader}>
-        {DAYS.map(item => {
-          return <Text key={item} style={styles.dayHeaderItem}>{item}</Text>
-        })}
+        {DAYS.map(item => <Text key={item} style={styles.dayHeaderText}>{item}</Text>)}
       </View>
       
       <View style={styles.daysContainer}>
-        {test(year, month, (year == today.current.year && month == today.current.month ? today.current.day : -1), (x) => {
-          if (x.month == 1) {
-            next();
-          } else if (x.month == -1) {
-            prev();
+        {calendarTable(
+          year, 
+          month, 
+          (year == today.current.year && month == today.current.month ? today.current.day : -1), 
+          selected, 
+          selectedColor, 
+          todayColor, 
+          value => {
+            if (value.month == 1) {
+              next();
+            } else if (value.month == -1) {
+              prev();
+            }
+            setSelected(value.day);
           }
-          console.log(x.day);
-        })}
+        )}
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  dateHeaderPicker: {
-    flex: 1,
+  container: {
+    margin: 20, 
+    paddingTop: 10, 
+    maxWidth: 600, 
+    borderWidth: 1, 
+    backgroundColor: '#ededed'
+  },
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  dateHeader: {
+  headerText: {
     fontSize: 20,
     textAlign: 'center',
   },
   daysContainer: {
     width: '100%',
-    backgroundColor: 'red',
   },
   dayHeader: {
     width: '100%',
     flexDirection: 'row',
+    marginBottom: 5,
   },
-  dayHeaderItem: {
+  dayHeaderText: {
     width: 100/7 + '%',
     textAlign: 'center',
   },
-  day: {
-    width: 100/7 + '%',
-    backgroundColor: '#ededed',
-    aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  
+  chevron: {
+    padding: 10,
+  }
 });
-
 
 export default Calender;
