@@ -1,0 +1,560 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`carousel with items (images only) renders correctly 1`] = `
+<View>
+  <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "alignItems": "flex-start",
+      }
+    }
+    horizontal={true}
+  >
+    <View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BOTFmNzY4Y2UtYTIzYy00MmE2LTk0YzUtYmY2Y2ZlNjQ0OGUxXkEyXkFqcGdeQXVyMjUyNDk2ODc@._V1_UY268_CR1,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        />
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BMTY2NjA4MjgwOF5BMl5BanBnXkFtZTcwMjI2MzYyNw@@._V1_UY268_CR3,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        />
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BYTIyYTgyZmMtNGNlMy00ZWQzLWI0YjctOTAxOWJmYmJjMWY1XkEyXkFqcGdeQXVyMTQzMjU1NjE@._V1_UY268_CR3,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        />
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://duifokus.se/wp-content/uploads/2017/02/Sameblod-affisch.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        />
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;
+
+exports[`carousel with items renders correctly 1`] = `
+<View>
+  <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "alignItems": "flex-start",
+      }
+    }
+    horizontal={true}
+  >
+    <View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BOTFmNzY4Y2UtYTIzYy00MmE2LTk0YzUtYmY2Y2ZlNjQ0OGUxXkEyXkFqcGdeQXVyMjUyNDk2ODc@._V1_UY268_CR1,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "padding": 10,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "gold",
+                    "fontSize": 25,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#fff",
+                  "fontSize": 20,
+                  "paddingLeft": 5,
+                }
+              }
+            >
+              10
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={
+              Object {
+                "color": "white",
+                "fontSize": 20,
+                "paddingBottom": 15,
+                "paddingLeft": 10,
+                "paddingRight": 10,
+              }
+            }
+          >
+            item 1
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BMTY2NjA4MjgwOF5BMl5BanBnXkFtZTcwMjI2MzYyNw@@._V1_UY268_CR3,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "padding": 10,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "gold",
+                    "fontSize": 25,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#fff",
+                  "fontSize": 20,
+                  "paddingLeft": 5,
+                }
+              }
+            >
+              9.8
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={
+              Object {
+                "color": "white",
+                "fontSize": 20,
+                "paddingBottom": 15,
+                "paddingLeft": 10,
+                "paddingRight": 10,
+              }
+            }
+          >
+            item 2
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://m.media-amazon.com/images/M/MV5BYTIyYTgyZmMtNGNlMy00ZWQzLWI0YjctOTAxOWJmYmJjMWY1XkEyXkFqcGdeQXVyMTQzMjU1NjE@._V1_UY268_CR3,0,182,268_AL_.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "padding": 10,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "gold",
+                    "fontSize": 25,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#fff",
+                  "fontSize": 20,
+                  "paddingLeft": 5,
+                }
+              }
+            >
+              9.6
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={
+              Object {
+                "color": "white",
+                "fontSize": 20,
+                "paddingBottom": 15,
+                "paddingLeft": 10,
+                "paddingRight": 10,
+              }
+            }
+          >
+            item 3
+          </Text>
+        </View>
+      </View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "flexDirection": "column",
+            "margin": 10,
+            "opacity": 1,
+            "width": 150,
+          }
+        }
+      >
+        <Image
+          source={
+            Object {
+              "uri": "https://duifokus.se/wp-content/uploads/2017/02/Sameblod-affisch.jpg",
+            }
+          }
+          style={
+            Object {
+              "aspectRatio": 0.6666666666666666,
+              "minWidth": "100%",
+            }
+          }
+        />
+        <View
+          style={Object {}}
+        >
+          <View
+            style={
+              Object {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "padding": 10,
+              }
+            }
+          >
+            <Text
+              allowFontScaling={false}
+              style={
+                Array [
+                  Object {
+                    "color": "gold",
+                    "fontSize": 25,
+                  },
+                  undefined,
+                  Object {
+                    "fontFamily": "FontAwesome",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal",
+                  },
+                  Object {},
+                ]
+              }
+            >
+              
+            </Text>
+            <Text
+              style={
+                Object {
+                  "color": "#fff",
+                  "fontSize": 20,
+                  "paddingLeft": 5,
+                }
+              }
+            >
+              0.3
+            </Text>
+          </View>
+          <Text
+            numberOfLines={1}
+            style={
+              Object {
+                "color": "white",
+                "fontSize": 20,
+                "paddingBottom": 15,
+                "paddingLeft": 10,
+                "paddingRight": 10,
+              }
+            }
+          >
+            item 4
+          </Text>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;
+
+exports[`empty carousel renders correctly 1`] = `
+<View>
+  <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "alignItems": "flex-start",
+      }
+    }
+    horizontal={true}
+  >
+    <View />
+  </RCTScrollView>
+</View>
+`;
